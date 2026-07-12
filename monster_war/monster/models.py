@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import User, AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
 from django.db import models
 
 #Make your migrations here
-class User(models.Model):
+class Trainer(models.Model):
     trainer_name = models.OneToOneField(User, on_delete=models.CASCADE)
     wins = models.IntegerField()
     looses = models.IntegerField()
@@ -21,24 +21,30 @@ class User(models.Model):
     def __str__(self):
         return f"{self.user.username} win ratio of {self.win_ratio}"
     
-class effects(models.Model):
+class Effects(models.Model):
     thing = models.CharField(max_length=20)
 
-class attacks(models.Model):
+class Attacks(models.Model):
     name = models.CharField(max_length=100)
     atk = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999999999)]
     )
-    ability = models.ForeignKey(effects, on_delete=models.CASCADE)
+    ability = models.ForeignKey(Effects, on_delete=models.CASCADE)
 
-class monster(models.Model):
+class Monster(models.Model):
     name = models.CharField(max_length=30)
+    mon_img = models.ImageField(
+        upload_to='gifs/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['gif'])],
+    )
     str = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
     defense = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
-    special = models.ForeignKey(attacks, on_delete=models.CASCADE)
+    special = models.ForeignKey(Attacks, on_delete=models.CASCADE)
 
     
