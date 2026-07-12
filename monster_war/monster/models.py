@@ -1,10 +1,10 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-# Create your models here.
-class User(AbstractUser):
-    trainer_name = models.CharField(max_length=20)
+#Make your migrations here
+class User(models.Model):
+    trainer_name = models.OneToOneField(User, on_delete=models.CASCADE)
     wins = models.IntegerField()
     looses = models.IntegerField()
     battles = models.IntegerField()
@@ -19,7 +19,7 @@ class User(AbstractUser):
         return int((self.wins/self.battles) * 100)
     
     def __str__(self):
-        return f"{self.username} win ratio of {self.win_ratio}"
+        return f"{self.user.username} win ratio of {self.win_ratio}"
     
 class effects(models.Model):
     thing = models.CharField(max_length=20)
