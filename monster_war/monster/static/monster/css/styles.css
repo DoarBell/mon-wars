@@ -1,0 +1,15 @@
+.topimgs{
+    height: 200px;
+    width: 100%;
+}
+
+#soundmanager{
+    position: absolute;
+    right: 1;
+    margin: 5px;
+    margin-left: 10px;
+}
+
+#sound_on_off{
+    transform: scale(2);
+}
