@@ -9,6 +9,7 @@ class Trainer(models.Model):
     looses = models.IntegerField()
     battles = models.IntegerField()
     luck = models.IntegerField()
+    likessounds = models.BooleanField(default=True)
     def monster_count(self):
         return self.monster.count()
     
@@ -46,5 +47,3 @@ class Monster(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
     special = models.ForeignKey(Attacks, on_delete=models.CASCADE)
-
-    
