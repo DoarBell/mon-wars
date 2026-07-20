@@ -8,18 +8,68 @@
         <link rel="stylesheet" href="{% static 'monster/css/styles.css' %}">
     </head>
     <body>
-        <header>
+        <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+            <div class="bg-dark p-4">
+                {% if trainer %}
+                    <h5 id="data" style="color: white; font-size: 60px;"">Trainer: {{ trainer|upper }} win ratio of {{ wins }}</h5>
+                {% else %}
+                    <h5 id="data" style="color: rgb(3, 131, 1);">Unregistered user detected please login</h5>
+                {% endif %}
+            </div>
+            </div>
+            <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <ul class="nav nav-pills nav-fill">
+                    <li id="login_li">
+                        <a id="login_btn" class="nav-link" href="{% url 'login' %}">login</a>
+                    </li>
+                    <li id="register_li">
+                        <a id="register_btn" class="nav-link" href="{% url 'index' %}">register</a>
+                    </li>
+                    <li id="logout_li">
+                        <a id="logout_btn" class="nav-link" href="{% url 'logout' %}">logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <header style="background-color: black;">
             <div id="soundmanager">
                 <input id="sound_on_off" type="checkbox">
-                <label for="sound_on_off">Headersound</label>
+                <label for="sound_on_off">Mute header</label>
             </div>
             <img id="serparVSninosaur" class="topimgs" data-audio="{% static 'monster/sounds/maintheme.mp3' %}" src="{% static 'monster/images/monfight.jpg' %}" alt="img not found">
         </header>
-        <main>
-            
-        </main>
+        <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+            <div class="bg-dark p-4">
+                <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'manual' %}">Manual</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'monster' %}">Monster</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'fight' %}">Fight</a>
+                </li>
+                </ul>
+            </div>
+        </div>
+        <div id="sidepannel">
+            {% if monsters %}
+                {% for monsters in trainer %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        
         {% block body %}
         {% endblock %}
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'monster/javascript/monster.js' %}"></script>
 </html>

@@ -3,23 +3,33 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-# Create your views here.
+from .models import Trainer
 
+# Create your views here.
 def index(request):
-    return render(request, "monster/layout.html")
+    try:
+        user = request.user
+        trainer = user.trainer_info
+        trainer_win = trainer.win_ratio
+    except AttributeError:
+        return render(request, "monster/layout.html")
+    else:
+        return render(request, "monster/layout.html",{
+            "trainer": trainer,
+            "wins": trainer_win,
+        })
 
 def login_view(request):
-    # need to make this
     if request.method == "POST":
         username = request.POST["username"]
-        password = request.POsT["password"]
+        password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             #index doesnt exist yet
-            return HttpResponse(reverse("index"))
+            return HttpResponseRedirect(reverse("index"))
         else:
             #login also doesnt exist yet
             return render(request, "monster/login.html" ,{
@@ -31,7 +41,7 @@ def login_view(request):
 def logout_view(request):
     # and this
     logout(request)
-    return HttpResponse(reverse("index"))
+    return HttpResponseRedirect(reverse("index"))
 
 def register(request):
     #forgot you needed to register yourself
@@ -55,3 +65,15 @@ def register(request):
         return HttpResponse(reverse("index"))
     else:
         return render(request, "monster/register.html")
+    
+def monster(request):
+    return render(request, "monster/monster.html")
+
+def manual(request):
+    return render(request, "monster/manual.html")
+
+def training(request):
+    return render(request, "monster/training.html")
+
+def fight(request):
+    return render(request, "monster/fight.html")

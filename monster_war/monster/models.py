@@ -1,39 +1,66 @@
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import m2m_changed
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
 from django.db import models
 
-#Make your migrations here
 class Trainer(models.Model):
-    trainer_name = models.OneToOneField(User, on_delete=models.CASCADE)
-    wins = models.IntegerField()
-    looses = models.IntegerField()
-    battles = models.IntegerField()
-    luck = models.IntegerField()
-    likessounds = models.BooleanField(default=True)
+    trainer_name = models.CharField(max_length=30)
+    wins = models.IntegerField(default=0)
+    looses = models.IntegerField(default=0)
+    battles = models.IntegerField(default=0)
+    luck = models.IntegerField(default=0)
+    likessounds = models.BooleanField(default=False)
+
     def monster_count(self):
-        return self.monster.count()
+        return self.info.slaverist.count() if self.info else 0
     
     @property
     def win_ratio(self):
         if self.battles == 0:
             return 0
-        return int((self.wins/self.battles) * 100)
+        return int((self.wins / self.battles) * 100)
     
     def __str__(self):
-        return f"{self.user.username} win ratio of {self.win_ratio}"
+        return f"{self.trainer_name}"
     
+class User(AbstractUser):
+    trainer_info = models.OneToOneField(
+        Trainer,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="info"
+    )
+    def __str__(self):
+        return f"{self.username} trainer name: {self.trainer_info if self.trainer_info else 'None'}"
+
 class Effects(models.Model):
     thing = models.CharField(max_length=20)
+    def __str__(self):
+        return self.thing
 
 class Attacks(models.Model):
     name = models.CharField(max_length=100)
     atk = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999999999)]
     )
-    ability = models.ForeignKey(Effects, on_delete=models.CASCADE)
+    ability = models.ManyToManyField(Effects, blank=True)
+    def __str__(self):
+        return f"{self.name}"
 
 class Monster(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="slaverist")
     name = models.CharField(max_length=30)
+    lpoints = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(1000)],
+    )
+    mon_atk_anim = models.ImageField(
+        upload_to='gifs/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['gif'])],
+    )
     mon_img = models.ImageField(
         upload_to='gifs/',
         blank=True,
@@ -46,4 +73,6 @@ class Monster(models.Model):
     defense = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
-    special = models.ForeignKey(Attacks, on_delete=models.CASCADE)
+    special = models.ManyToManyField(Attacks, related_name="attack")
+
+    alive = models.BooleanField(default=True)
