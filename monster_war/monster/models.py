@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import m2m_changed
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
+from django.dispatch import receiver
 from django.db import models
 
 class Trainer(models.Model):
@@ -50,24 +51,25 @@ class Attacks(models.Model):
         return f"{self.name}"
 
 class Monster(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="slaverist")
+    owner = models.ManyToManyField(User, related_name="slaverist")
     name = models.CharField(max_length=30)
     lpoints = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(1000)],
     )
+    description = models.CharField(max_length=1000, default="Monster description")
     mon_atk_anim = models.ImageField(
-        upload_to='gifs/',
+        upload_to='monster_imgs/',
         blank=True,
         null=True,
-        validators=[FileExtensionValidator(allowed_extensions=['gif'])],
+        validators=[FileExtensionValidator(allowed_extensions=['png'])],
     )
     mon_img = models.ImageField(
-        upload_to='gifs/',
+        upload_to='monster/static/monster/images',
         blank=True,
         null=True,
-        validators=[FileExtensionValidator(allowed_extensions=['gif'])],
+        validators=[FileExtensionValidator(allowed_extensions=['png'])],
     )
-    str = models.IntegerField(
+    strength = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
     defense = models.IntegerField(
@@ -76,3 +78,7 @@ class Monster(models.Model):
     special = models.ManyToManyField(Attacks, related_name="attack")
 
     alive = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.name}"
+

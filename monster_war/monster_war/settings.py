@@ -26,6 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/ 'media'
 
 # Application definition
 
@@ -61,6 +63,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'monster.context_processors.trainer',
+                'monster.context_processors.monster_team'
             ],
         },
     },

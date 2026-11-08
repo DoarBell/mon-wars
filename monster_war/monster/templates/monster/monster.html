@@ -1,0 +1,41 @@
+{% extends "monster/layout.html" %}
+{% block body %}
+    <h1>Your monsters:</h1>
+    <div class="row mx-3" style="margin-right: 10px;">
+        <div class="card center">
+            <div class="center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 5l0 14" />
+                    <path d="M5 12l14 0" />
+                </svg>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                    <a id="newMonster" href="{% url 'newMonster' %}" class="btn btn-primary">Create new monster</a>
+                </div>
+            </div>
+        </div>
+        {% for monster in monsters %}
+        <div class="card">
+            <div class="row mb-3 center">
+                <img src="{{ monster.mon_img.url }}" class="card-img-top" alt="mon_img">
+                <div class="hp-bar">
+                    <div class="hp-fill" style="width: 100%;"></div>
+                    <span class="hp-text" style="color: white;">HP: {{ monster.lpoints }}</span>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ monster.name }}</h2>
+                    <h5>{{ monster.description }}</h5>
+                    {% for attack in monster.special.all %}
+                    <button class="btn btn-warning" id="attack_exp">{{ attack.name }}</button>
+                    {% empty %}
+                        <button class="btn btn-warning" id="newRandom">New random attack</button>
+                    {% endfor %}
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

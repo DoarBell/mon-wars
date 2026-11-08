@@ -3,18 +3,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta name="viewport" content="width=devide-width, initial-scale=1">
         <title>{% block title %}Monster fight{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'monster/css/styles.css' %}">
     </head>
     <body>
+        <!-- you have to authenticate the user and do an if the user is authenticated so the page doesnt kick you out of the monster and so on -->
         <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
             <div class="bg-dark p-4">
-                {% if trainer %}
-                    <h5 id="data" style="color: white; font-size: 60px;"">Trainer: {{ trainer|upper }} win ratio of {{ wins }}</h5>
+                {% if user.is_authenticated %}
+                    <h5 id="data" style="color: white; font-size: 60px;">Trainer: {{ trainer_info.trainer_name|upper }} win ratio of {{ trainer_info.win_ratio }}</h5>
                 {% else %}
-                    <h5 id="data" style="color: rgb(3, 131, 1);">Unregistered user detected please login</h5>
-                {% endif %}
+                    <h5 style="color: rgb(240, 240, 240);">Unregistered user detected please login
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-face-id-error">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+                            <path d="M4 16v2a2 2 0 0 0 2 2h2" />
+                            <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+                            <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
+                            <path d="M9 10h.01" />
+                            <path d="M15 10h.01" />
+                            <path d="M9.5 15.05a3.5 3.5 0 0 1 5 0" />
+                        </svg>
+                    </h5>
+                {% endif %} 
             </div>
             </div>
             <nav class="navbar navbar-dark bg-dark">
@@ -23,15 +36,40 @@
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <ul class="nav nav-pills nav-fill">
+                    {% if not user.is_authenticated %}
                     <li id="login_li">
-                        <a id="login_btn" class="nav-link" href="{% url 'login' %}">login</a>
+                        <a id="login_btn" class="nav-link" href="{% url 'login' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-login-2">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
+                            <path d="M3 12h13l-3 -3" />
+                            <path d="M13 15l3 -3" />
+                        </svg>
+                        login</a>
                     </li>
                     <li id="register_li">
-                        <a id="register_btn" class="nav-link" href="{% url 'index' %}">register</a>
+                        <a id="register_btn" class="nav-link" href="{% url 'register' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-key">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h5" />
+                            <path d="M18.5 18.5l-3.5 3.5l-1.5 -1.5" />
+                            <path d="M18.554 18.414a2 2 0 1 1 2.828 -2.828a2 2 0 0 1 -2.828 2.828" />
+                            <path d="M16 19l1 1" />
+                        </svg>register</a>
                     </li>
+                    {% else %}
                     <li id="logout_li">
-                        <a id="logout_btn" class="nav-link" href="{% url 'logout' %}">logout</a>
+                        <a id="logout_btn" class="nav-link" href="{% url 'logout' %}">logout
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-logout">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                                <path d="M9 12h12l-3 -3" />
+                                <path d="M18 15l3 -3" />
+                            </svg>
+                        </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
@@ -46,29 +84,70 @@
             <div class="bg-dark p-4">
                 <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    <a class="nav-link" href="{% url 'index' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-home">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                        </svg>Home
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'manual' %}">Manual</a>
+                    <a class="nav-link" href="{% url 'manual' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-report-analytics">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                            <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" />
+                            <path d="M9 17v-5" />
+                            <path d="M12 17v-1" />
+                            <path d="M15 17v-3" />
+                        </svg>
+                        Manual</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'monster' %}">Monster</a>
+                    <a class="nav-link" href="{% url 'monster' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-man">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M10 16v5" />
+                            <path d="M14 16v5" />
+                            <path d="M9 9h6l-1 7h-4l-1 -7" />
+                            <path d="M5 11c1.333 -1.333 2.667 -2 4 -2" />
+                            <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2" />
+                            <path d="M10 4a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        </svg>
+                        Monster</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'fight' %}">Fight</a>
+                    <a class="nav-link" href="{% url 'fight' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-player-play">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M7 4v16l13 -8l-13 -8" />
+                    </svg>
+                    Fight</a>
                 </li>
                 </ul>
             </div>
         </div>
-        <div id="sidepannel">
-            {% if monsters %}
-                {% for monsters in trainer %}
-                {% endfor %}
-            {% endif %}
+        <div class="page-layout">
+            <div id="monster_teamside">
+                <h3 class="text-light">My monsters:</h3>
+                <div class="row">
+                    {% if monster_team %}
+                        {% for monster in monster_team %}
+                            <img id="monster" src="{{ monster.mon_img.url }}" alt="image not found">
+                        {% endfor %}
+                    {% else %}
+                        <p style="color: white;padding-left: 10px;">No monsters, for you unregistered user</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="main-content"">
+                {% block body %}
+                {% endblock %}
+            </div>
         </div>
-        
-        {% block body %}
-        {% endblock %}
     </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'monster/javascript/monster.js' %}"></script>

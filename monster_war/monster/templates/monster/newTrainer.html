@@ -1,0 +1,21 @@
+{% extends "monster/layout.html" %}
+
+{% block body %}
+
+    <h2>Register</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'newTrainer' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Trainer Name">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Register">
+    </form>
+
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+
+{% endblock %}
