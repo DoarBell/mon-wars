@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- you have to authenticate the user and do an if the user is authenticated so the page doesnt kick you out of the monster and so on -->
-        <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+        <div class="collapse nav-collapse" id="trainerpanel" data-bs-theme="dark">
             <div class="bg-dark p-4">
                 {% if user.is_authenticated %}
                     <h5 id="data" style="color: white; font-size: 60px;">Trainer: {{ trainer_info.trainer_name|upper }} win ratio of {{ trainer_info.win_ratio }}</h5>
@@ -29,10 +29,11 @@
                     </h5>
                 {% endif %} 
             </div>
-            </div>
-            <nav class="navbar navbar-dark bg-dark">
+        </div>
+
+        <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".nav-collapse" aria-controls="trainerpanel menupanel" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <ul class="nav nav-pills nav-fill">
@@ -80,7 +81,8 @@
             </div>
             <img id="serparVSninosaur" class="topimgs" data-audio="{% static 'monster/sounds/maintheme.mp3' %}" src="{% static 'monster/images/monfight.jpg' %}" alt="img not found">
         </header>
-        <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+
+        <div class="collapse nav-collapse" id="menupanel" data-bs-theme="dark">
             <div class="bg-dark p-4">
                 <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
@@ -138,7 +140,8 @@
                             <img id="monster" src="{{ monster.mon_img.url }}" alt="image not found">
                         {% endfor %}
                     {% else %}
-                        <p style="color: white;padding-left: 10px;">No monsters, for you unregistered user</p>
+                        <p style="color: white;padding-left: 10px;">No monsters for you brother, make one!</p> 
+                        <a class="btn btn-primary" href="{% url 'newMonster' %}">Make a new monster</a>
                     {% endif %}
                 </div>
             </div>
