@@ -1,0 +1,33 @@
+{% extends "monster/layout.html" %}
+{% block body %}
+    {% if message %}
+        <h1>{{message}}</h1>
+    {% endif %}
+    <form class="center" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="card" style="width: 20rem;">
+            <div class="card-img-top center" style="height: 300px;">
+                <label class="image-drop" for="image-input">
+                    <svg id="upload-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 5l0 14" />
+                        <path d="M5 12l14 0" />
+                    </svg>
+                    <img id="preview" alt="" hidden>
+                </label>
+                <input type="file" id="image-input" name="image" accept="image/*" hidden>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Monster Name:</h5>
+                <input type="text" name="name" placeholder="Name">
+                <h5 class="card-text">Monster description:</h5>
+                <textarea name="description" id="mondescription" placeholder="Descrive your monster"></textarea>
+                <a id="ran_atk" class="btn btn-primary">Click for random attack</a>
+                <div id="new_atk"></div>
+                <input type="hidden" name="attack" id="attack_input">
+            </div>
+        </div>
+        <button id="upload_btn" style="width: 20rem;" class="btn btn-warning" type="submit" hidden>Make monster</button>
+    </form>
+
+{% endblock %}
